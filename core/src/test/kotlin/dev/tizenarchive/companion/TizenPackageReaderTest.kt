@@ -91,10 +91,25 @@ class TizenPackageReaderTest {
     }
 
     @Test
-    fun `rejects manifests with a DTD`() {
-        val xml = """<?xml version="1.0"?><!DOCTYPE manifest [<!ENTITY x SYSTEM "file:///etc/passwd">]>
-            <manifest package="a.b" version="1"/>"""
-        assertThrows(InvalidTizenPackageException::class.java) { TizenPackageReader.read(zip("tizen-manifest.xml" to xml)) }
+    fun `rejects manifests with a DTD and external entity`() {
+        val xml = """<?xml version="1.0"?>
+            <!DOCTYPE manifest [<!ENTITY x SYSTEM "file:///etc/passwd">]>
+            <manifest package="a.b" version="1">&x;</manifest>"""
+        assertThrows(InvalidTizenPackageException::class.java) {
+            TizenPackageReader.read(zip("tizen-manifest.xml" to xml))
+        }
+    }
+
+    @Test
+    fun `rejects web manifests with external DTD declarations`() {
+        val xml = """<?xml version="1.0"?>
+            <!DOCTYPE widget SYSTEM "https://example.invalid/evil.dtd">
+            <widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets">
+              <tizen:application package="example"/>
+            </widget>"""
+        assertThrows(InvalidTizenPackageException::class.java) {
+            TizenPackageReader.read(zip("config.xml" to xml))
+        }
     }
 
     @Test
@@ -107,6 +122,8 @@ class TizenPackageReaderTest {
     @Test
     fun `rejects an oversized manifest`() {
         val huge = "<manifest package=\"a.b\">" + " ".repeat(2_000_000) + "</manifest>"
-        assertThrows(InvalidTizenPackageException::class.java) { TizenPackageReader.read(zip("tizen-manifest.xml" to huge)) }
+        assertThrows(InvalidTizenPackageException::class.java) {
+            TizenPackageReader.read(zip("tizen-manifest.xml" to huge))
+        }
     }
 }

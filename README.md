@@ -7,10 +7,11 @@ that installs Tizen watch packages (`.wgt`, `.tpk`) on a Samsung Galaxy Watch or
 
 - **Galaxy Wearable** (no developer mode needed). For every package the app builds a tiny code-free companion APK that
   carries the package in `assets/`, signs it with a key kept in the Android Keystore and asks Android to install it.
-  Samsung's Gear Plugin notices the companion and sends the package to the watch over Bluetooth.
+  Samsung's Gear Plugin notices the companion and sends the package to the watch over Bluetooth. In MeisterBaer's test, the Gear S Plugin required permission to install unknown apps.
 - **Wi-Fi** (faster, shows the real result). The phone talks `sdb` to the watch over your Wi-Fi network and installs the
   package with the watch's own package manager (`pkgcmd -w`, the mode that accepts store-signed packages). It needs
   Debugging turned on in the watch's developer options.
+
 
 Both ways install only what the watch's own package manager accepts (a valid store signature is still required): the app never modifies a package or its signatures.
 
@@ -71,6 +72,7 @@ Wi-Fi way:
   network that isolates devices). To turn it on: Settings → About watch → Software, tap the software version five
   times, then Developer options → Debugging. Keep the watch's screen on while you connect: its Wi-Fi sleeps.
 - On Android 17 the permission to use the local network (Android asks when you search or send).
+- Tested on a Samsung Gear S3 Frontier (SM-R760, Tizen 4.0.0.7, firmware R760XXU2FUD1) over Wi-Fi. During this test, the watch refused a package with `The watch refused the package (Image error -24)`. The cause is unknown; this error alone does not establish a compatibility issue.
 - No other `sdb` tool connected to the watch at the same moment (the watch serves one host at a time), and no VPN
   running on the phone (it can capture the traffic to the watch).
 - Tested on a Galaxy Watch (SM-R800, Tizen 5.5) with Android 17.
@@ -170,6 +172,10 @@ Debug builds use the application id suffix `.debug`, so they can be installed ne
 it. Instrumented tests (`app/src/androidTest`, Keystore and scale) need a device: `./gradlew :app:connectedDebugAndroidTest`.
 
 Releases: [docs/RELEASING.md](docs/RELEASING.md).
+
+## Contributors
+
+- **MeisterBaer**
 
 ## License
 
