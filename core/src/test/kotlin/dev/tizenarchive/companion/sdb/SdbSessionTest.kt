@@ -139,7 +139,7 @@ class SdbSessionTest {
     fun `remote paths with odd characters are refused before anything is sent`() {
         val watch = watch()
         connect(watch).use { session ->
-            for (path in listOf("relative.bin", "/tmp/a b", "/tmp/a,0644", "/tmp/a;rm", "/tmp/\u0000", "", "/")) {
+            for (path in listOf("relative.bin", "/tmp/a b", "/tmp/a,0644", "/tmp/a;rm", "/tmp/\u0000", "", "/", "/tmp/../etc/passwd", "/tmp/./file", "/tmp//file", "/tmp/a/..")) {
                 assertThrows(IllegalArgumentException::class.java, { session.push(path, ByteArrayInputStream(ByteArray(1))) }, path)
             }
         }
@@ -209,7 +209,7 @@ class SdbSessionTest {
     fun `list and pull refuse odd paths before anything is sent`() {
         val watch = watch()
         connect(watch).use { session ->
-            for (path in listOf("relative", "/tmp/a b", "/tmp/a;rm", "")) {
+            for (path in listOf("relative", "/tmp/a b", "/tmp/a;rm", "", "/tmp/../etc/passwd", "/tmp/./file", "/tmp//file", "/tmp/a/..")) {
                 assertThrows(IllegalArgumentException::class.java, { session.list(path) }, path)
                 assertThrows(IllegalArgumentException::class.java, { session.pull(path, ByteArrayOutputStream(), 1) }, path)
             }
