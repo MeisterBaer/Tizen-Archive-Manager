@@ -12,6 +12,12 @@ import java.net.SocketTimeoutException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
+private val SAFE_REMOTE_PATH = Regex("/[A-Za-z0-9._/-]{1,200}")
+
+/** Accept absolute, normalized paths only; these values are passed to the watch file service. */
+internal fun isSafeRemotePath(path: String): Boolean =
+    SAFE_REMOTE_PATH.matches(path) && path.substring(1).split('/').all { it.isNotEmpty() && it != "." && it != ".." }
+
 public class SdbOptions(
     public val connectTimeoutMs: Int = 10_000,
     public val readTimeoutMs: Int = 120_000,
@@ -55,7 +61,7 @@ public class SdbSession private constructor(
     }
 
     override fun push(remotePath: String, data: InputStream, mode: Int, progress: (Long) -> Unit) {
-        require(REMOTE_PATH.matches(remotePath)) { "Unsupported remote path" }
+        require(isSafeRemotePath(remotePath)) { "Unsupported remote path" }
         val id = open("sync:")
         try {
             val target = "$remotePath,$mode".toByteArray(Charsets.UTF_8)
@@ -84,7 +90,7 @@ public class SdbSession private constructor(
     }
 
     override fun list(remoteDir: String): List<RemoteEntry> {
-        require(REMOTE_PATH.matches(remoteDir)) { "Unsupported remote path" }
+        require(isSafeRemotePath(remoteDir)) { "Unsupported remote path" }
         val id = open("sync:")
         try {
             val reader = SyncReader(id)
@@ -113,7 +119,7 @@ public class SdbSession private constructor(
     }
 
     override fun pull(remotePath: String, out: OutputStream, maxBytes: Long): Boolean {
-        require(REMOTE_PATH.matches(remotePath)) { "Unsupported remote path" }
+        require(isSafeRemotePath(remotePath)) { "Unsupported remote path" }
         val id = open("sync:")
         try {
             val reader = SyncReader(id)
@@ -271,7 +277,6 @@ public class SdbSession private constructor(
         private const val AUTH_TOKEN = 1
         private const val AUTH_SIGNATURE = 2
         private const val AUTH_PUBLIC_KEY = 3
-        private val REMOTE_PATH = Regex("/[A-Za-z0-9._/-]{1,200}")
 
         /**
          * Connects [socket] (which the caller may have bound to a network) to [address] and authorizes with [signer].
