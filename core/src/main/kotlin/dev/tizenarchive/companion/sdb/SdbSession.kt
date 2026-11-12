@@ -16,7 +16,7 @@ private val SAFE_REMOTE_PATH = Regex("/[A-Za-z0-9._/-]{1,200}")
 
 /** Accept absolute, normalized paths only; these values are passed to the watch file service. */
 internal fun isSafeRemotePath(path: String): Boolean =
-    SAFE_isSafeRemotePath(path) && path.substring(1).split('/').all { it.isNotEmpty() && it != "." && it != ".." }
+    SAFE_REMOTE_PATH.matches(path) && path.substring(1).split('/').all { it.isNotEmpty() && it != "." && it != ".." }
 
 public class SdbOptions(
     public val connectTimeoutMs: Int = 10_000,
