@@ -57,6 +57,15 @@ class WatchInstallerTest {
     private val ok = "key[install_percent] val[40]\nkey[install_percent] val[90]\nkey[end] val[ok]\nspend time for pkgcmd is [4000]ms"
 
     @Test
+    fun `an unsafe remote directory is refused before any command is sent`() {
+        val service = FakeService()
+        for (path in listOf("/tmp/../etc", "/tmp/./nested", "/tmp//nested", "/tmp/a;rm")) {
+            assertThrows(IllegalArgumentException::class.java) { WatchInstaller(service, path) }
+        }
+        assertTrue(service.steps.isEmpty())
+    }
+
+    @Test
     fun `an install makes the directory, uploads, installs and cleans up`() {
         val service = FakeService().also { it.answers["pkgcmd -i"] = ok }
         val file = packageFile()
