@@ -171,6 +171,10 @@ it. Instrumented tests (`app/src/androidTest`, Keystore and scale) need a device
 
 Releases: [docs/RELEASING.md](docs/RELEASING.md).
 
+## Contributors
+
+- **MeisterBaer** — project direction, requirements, and review of project improvements.
+
 ## License
 
 Apache License 2.0, see [LICENSE](LICENSE) and [NOTICE](NOTICE).
