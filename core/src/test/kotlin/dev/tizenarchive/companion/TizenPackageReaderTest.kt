@@ -113,6 +113,21 @@ class TizenPackageReaderTest {
     }
 
     @Test
+    fun `rejects UTF-16 manifests with a DTD`() {
+        val xml = """<?xml version="1.0"?>
+            <!DOCTYPE manifest [<!ENTITY x "expanded">]>
+            <manifest package="a.b" version="1">&x;</manifest>""".toByteArray(Charsets.UTF_16)
+        val file = File(dir, "utf16-${System.nanoTime()}.bin")
+        ZipOutputStream(file.outputStream()).use { zip ->
+            zip.putNextEntry(ZipEntry("tizen-manifest.xml"))
+            zip.write(xml)
+            zip.closeEntry()
+        }
+
+        assertThrows(InvalidTizenPackageException::class.java) { TizenPackageReader.read(file) }
+    }
+
+    @Test
     fun `rejects a manifest without a package id`() {
         assertThrows(InvalidTizenPackageException::class.java) {
             TizenPackageReader.read(zip("tizen-manifest.xml" to """<manifest version="1"/>"""))
@@ -122,8 +137,6 @@ class TizenPackageReaderTest {
     @Test
     fun `rejects an oversized manifest`() {
         val huge = "<manifest package=\"a.b\">" + " ".repeat(2_000_000) + "</manifest>"
-        assertThrows(InvalidTizenPackageException::class.java) {
-            TizenPackageReader.read(zip("tizen-manifest.xml" to huge))
-        }
+        assertThrows(InvalidTizenPackageException::class.java) { TizenPackageReader.read(zip("tizen-manifest.xml" to huge)) }
     }
 }
