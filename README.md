@@ -11,7 +11,7 @@ that installs Tizen watch packages (`.wgt`, `.tpk`) on a Samsung Galaxy Watch or
 - **Wi-Fi** (faster, shows the real result). The phone talks `sdb` to the watch over your Wi-Fi network and installs the
   package with the watch's own package manager (`pkgcmd -w`, the mode that accepts store-signed packages). It needs
   Debugging turned on in the watch's developer options.
-  <!-- User test note: The Gear S Plugin required permission to install unknown apps. Tested on the author's watch with System Info. -->
+  <!-- MeisterBaer's user test: The Gear S Plugin required permission to install unknown apps. Tested on MeisterBaer's watch with System Info. -->
 
 Both ways install only what the watch's own package manager accepts (a valid store signature is still required): the app never modifies a package or its signatures.
 
