@@ -72,20 +72,7 @@ Wi-Fi way:
   network that isolates devices). To turn it on: Settings → About watch → Software, tap the software version five
   times, then Developer options → Debugging. Keep the watch's screen on while you connect: its Wi-Fi sleeps.
 - On Android 17 the permission to use the local network (Android asks when you search or send).
-### Known Installation Error
-
-During testing with the Samsung Gear S3 Frontier, the following error occurred when attempting to install a package via Tizen Archive using the Wi-Fi connection method:
-
-`The watch refused the package (Image error -24)`
-
-**Test environment:**
-
-- Device: Samsung Gear S3 Frontier (SM-R760)
-- Tizen version: 4.0.0.7
-- Firmware: R760XXU2FUD1
-- Connection method: Wi-Fi
-
-The exact cause of this error is currently unknown and requires further investigation. It should not automatically be considered a compatibility issue.
+- Tested on a Samsung Gear S3 Frontier (SM-R760, Tizen 4.0.0.7, firmware R760XXU2FUD1) over Wi-Fi. During this test, the watch refused a package with `The watch refused the package (Image error -24)`. The cause is unknown; this error alone does not establish a compatibility issue.
 - No other `sdb` tool connected to the watch at the same moment (the watch serves one host at a time), and no VPN
   running on the phone (it can capture the traffic to the watch).
 - Tested on a Galaxy Watch (SM-R800, Tizen 5.5) with Android 17.
