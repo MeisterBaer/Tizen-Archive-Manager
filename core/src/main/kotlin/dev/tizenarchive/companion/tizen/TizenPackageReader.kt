@@ -5,11 +5,11 @@ import java.io.File
 import java.io.IOException
 import java.util.zip.ZipException
 import java.util.zip.ZipFile
-import javax.xml.XMLConstants
 import javax.xml.parsers.SAXParserFactory
 import org.xml.sax.Attributes
 import org.xml.sax.InputSource
 import org.xml.sax.SAXException
+import org.xml.sax.ext.DefaultHandler2
 import org.xml.sax.helpers.DefaultHandler
 
 /** Reads package id, version and name from a `.wgt`/`.tpk`; the type comes from the content, not the file name. */
@@ -146,19 +146,24 @@ public object TizenPackageReader {
 
     private fun parse(xml: ByteArray, handler: DefaultHandler) {
         try {
-            // Fail closed: do not parse a manifest if the selected XML implementation cannot disable
-            // DTDs and external entities. This also protects UTF-16/UTF-32 XML, which a byte scan misses.
+            // Fail closed if the selected XML implementation cannot disable external entities or report DTDs.
+            // The lexical callback sees declarations after the parser has decoded the document's encoding.
             val factory = SAXParserFactory.newInstance().apply {
                 isNamespaceAware = true
-                setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true)
-                setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)
                 setFeature("http://xml.org/sax/features/external-general-entities", false)
                 setFeature("http://xml.org/sax/features/external-parameter-entities", false)
-                setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
             }
             val reader = factory.newSAXParser().xmlReader
-            reader.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "")
-            reader.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "")
+            // Android's Expat SAX reader supports these SAX features and lexical-handler, but not the
+            // Apache/JAXP-specific DOCTYPE and ACCESS_EXTERNAL_* controls used by desktop parsers.
+            // Reject DTDs at the parser callback so the check works for UTF-8, UTF-16, and other encodings.
+            reader.setFeature("http://xml.org/sax/features/external-general-entities", false)
+            reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false)
+            reader.setProperty("http://xml.org/sax/properties/lexical-handler", object : DefaultHandler2() {
+                override fun startDTD(name: String?, publicId: String?, systemId: String?) {
+                    throw SAXException("DOCTYPE declarations are not allowed")
+                }
+            })
             reader.entityResolver = org.xml.sax.EntityResolver { _, _ ->
                 throw SAXException("External XML entities are not allowed")
             }
