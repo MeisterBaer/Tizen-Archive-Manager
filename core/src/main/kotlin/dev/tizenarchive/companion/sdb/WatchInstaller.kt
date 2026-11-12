@@ -43,6 +43,10 @@ public class WatchPackage(
  * Shell commands are built only from constants and values checked here, never from text inside a package.
  */
 public class WatchInstaller(private val service: SdbService, private val remoteDir: String = DEFAULT_DIR) {
+    init {
+        require(isSafeRemotePath(remoteDir)) { "Unsupported remote directory" }
+    }
+
     /** Sends [file], installs it and removes the copy from the watch whatever the outcome. */
     public fun install(file: File, type: PackageType, progress: (InstallProgress) -> Unit = {}): PkgcmdResult {
         val remote = "$remoteDir/${digestPrefix(file)}.${type.extension}"
