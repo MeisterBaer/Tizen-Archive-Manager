@@ -5,6 +5,7 @@ import java.io.File
 import java.io.IOException
 import java.util.zip.ZipException
 import java.util.zip.ZipFile
+import javax.xml.XMLConstants
 import javax.xml.parsers.SAXParserFactory
 import org.xml.sax.Attributes
 import org.xml.sax.InputSource
@@ -97,7 +98,7 @@ public object TizenPackageReader {
                 depth--
             }
         }
-        parse(xml, handler, namespaceAware = true)
+        parse(xml, handler)
         val id = handler.packageId?.trim().orEmpty()
         if (id.isEmpty()) throw InvalidTizenPackageException("tizen-manifest.xml has no package id")
         return TizenPackageInfo(TizenPackageKind.TPK, id, handler.version, handler.label, handler.icon?.let { "shared/res/$it" })
@@ -137,25 +138,38 @@ public object TizenPackageReader {
                 depth--
             }
         }
-        parse(xml, handler, namespaceAware = true)
+        parse(xml, handler)
         val id = handler.packageId?.trim().orEmpty()
         if (id.isEmpty()) throw InvalidTizenPackageException("config.xml has no tizen:application package id")
         return TizenPackageInfo(TizenPackageKind.WGT, id, handler.version, handler.name, handler.icon)
     }
 
-    private fun parse(xml: ByteArray, handler: DefaultHandler, namespaceAware: Boolean) {
-        // Some XML parsers (notably on Android) reject hardening features, so DTDs are refused up front.
-        val head = String(xml, Charsets.ISO_8859_1)
-        if (head.contains("<!DOCTYPE", ignoreCase = true) || head.contains("<!ENTITY", ignoreCase = true)) {
-            throw InvalidTizenPackageException("Manifest contains a DTD")
-        }
+    private fun parse(xml: ByteArray, handler: DefaultHandler) {
         try {
-            val factory = SAXParserFactory.newInstance().apply { isNamespaceAware = namespaceAware }
-            factory.newSAXParser().parse(InputSource(xml.inputStream()), handler)
+            // Fail closed: do not parse a manifest if the selected XML implementation cannot disable
+            // DTDs and external entities. This also protects UTF-16/UTF-32 XML, which a byte scan misses.
+            val factory = SAXParserFactory.newInstance().apply {
+                isNamespaceAware = true
+                setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true)
+                setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)
+                setFeature("http://xml.org/sax/features/external-general-entities", false)
+                setFeature("http://xml.org/sax/features/external-parameter-entities", false)
+                setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
+            }
+            val reader = factory.newSAXParser().xmlReader
+            reader.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "")
+            reader.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "")
+            reader.entityResolver = org.xml.sax.EntityResolver { _, _ ->
+                throw SAXException("External XML entities are not allowed")
+            }
+            reader.contentHandler = handler
+            reader.errorHandler = handler
+            reader.parse(InputSource(xml.inputStream()))
         } catch (e: SAXException) {
-            throw InvalidTizenPackageException("Manifest is not well-formed XML", e)
-        } catch (e: IOException) {
-            throw InvalidTizenPackageException("Cannot parse the manifest", e)
+            throw InvalidTizenPackageException("Manifest is not well-formed or uses forbidden XML features", e)
+        } catch (e: Exception) {
+            // Unsupported security features/properties must never cause a fallback to an insecure parser.
+            throw InvalidTizenPackageException("Cannot securely configure the XML parser", e)
         }
     }
 
