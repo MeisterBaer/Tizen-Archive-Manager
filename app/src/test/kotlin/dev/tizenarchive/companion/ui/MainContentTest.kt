@@ -213,10 +213,10 @@ class MainContentTest {
 
     @Test
     @Config(qualifiers = "ru-w411dp-h2400dp")
-    fun `russian strings are used under the ru locale`() {
+    fun `unsupported locale falls back to English`() {
         show(UiState(files = listOf(file("a.tpk"))))
         compose.onNodeWithText(str(R.string.install_selected, 0)).assertExists()
-        assert(str(R.string.install_selected, 0) != "Install selected (0)")
+        assertEquals("Install selected (0)", str(R.string.install_selected, 0))
     }
 
     @Test
