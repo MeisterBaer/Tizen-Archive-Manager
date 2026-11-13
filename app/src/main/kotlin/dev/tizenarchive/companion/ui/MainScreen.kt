@@ -663,7 +663,7 @@ private fun FolderCard(state: UiState, onPick: () -> Unit) {
             when {
                 state.scanning -> Text(stringResource(R.string.scanning))
                 state.folderName == null -> Text(stringResource(R.string.no_folder))
-                else -> Text("${state.folderName} — " + pluralStringResource(R.plurals.files_found, state.files.size, state.files.size))
+                else -> Text(stringResource(R.string.folder_file_count, state.folderName, pluralStringResource(R.plurals.files_found, state.files.size, state.files.size)))
             }
             Button(onClick = onPick, enabled = !state.installing) {
                 Text(stringResource(if (state.folderName == null) R.string.choose_folder else R.string.change_folder))
