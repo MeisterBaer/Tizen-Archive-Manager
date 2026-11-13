@@ -1,6 +1,6 @@
 # Android app identity
 
-Tizen Archive uses `de.meisterbaer.tizenarchivemanager` as its Android `applicationId`. This identifies the installed app and its Play Store listing, and lets it be installed alongside the original app, which uses `dev.tizenarchive.companion`.
+Tizen Archive Manager uses `de.meisterbaer.tizenarchivemanager` as its Android `applicationId`. This identifies the installed app and its Play Store listing, and lets it be installed alongside the original app, which uses `dev.tizenarchive.companion`.
 
 The Kotlin and Android resource `namespace` remains `dev.tizenarchive.companion`. It controls generated source names such as `R` and `BuildConfig`; keeping it avoids a broad source-code and package-path rewrite. The SDB implementation and Android permissions do not depend on the installed app ID.
 
