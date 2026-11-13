@@ -9,6 +9,7 @@
         <item quantity="one">%1$d package found</item>
         <item quantity="other">%1$d packages found</item>
     </plurals>
+    <string name="folder_file_count">%1$s — %2$s</string>
     <plurals name="incoming_rejected">
         <item quantity="one">%1$d received file is not a Tizen package and was ignored (tap to hide)</item>
         <item quantity="other">%1$d received files are not Tizen packages and were ignored (tap to hide)</item>
