@@ -18,7 +18,7 @@ The open release PR #7 currently proposes `de.meisterbaer.tizenarchivemanager` a
 - Use `de.meisterbaer.tizenarchivemanager` as the proposed long-term `applicationId`; do not change it again after publishing.
 - Change only the installed application ID. Keep the existing `namespace` and Kotlin package paths for now: they govern generated names such as `R` and `BuildConfig`, and changing them would add a broad source rewrite without helping parallel installation.
 - Keep the manifest action `dev.tizenarchive.companion.COMPANION` stable. It is the shared discovery contract used by helper apps. Do not rename it as part of the application-ID change.
-- Before an independent release, point the in-app updater at the fork's own GitHub repository and confirm its expected APK asset name. The current updater defaults to `Tizen-Archive/tizen-archive-android`.
+- Before an independent release, point the in-app updater at the fork's own GitHub repository and confirm its expected APK asset name. The inherited updater default points to `Tizen-Archive/tizen-archive-android`; the fork's release setup must point it to `MeisterBaer/Tizen-Archive-Manager`.
 - Update the F-Droid recipe and distribution metadata to the fork's final package ID and repository URLs before resubmitting or publishing the fork independently.
 - Treat the ID change as a new app installation: Android will not upgrade the old-ID installation or migrate its private data. Existing installs can remain beside it; both may appear as handlers for the same links or package files.
 
