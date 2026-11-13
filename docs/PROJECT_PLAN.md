@@ -1,6 +1,6 @@
 # Android app identity and language plan
 
-This plan records product requirements and implementation status for the MeisterBaer fork.
+This plan records product requirements and implementation status for the Tizen Archive Manager fork.
 
 ## 1. Give the fork its own Android identity
 
@@ -18,7 +18,7 @@ Keeping the existing namespace and Kotlin package paths avoids an unnecessary so
 - Use `de.meisterbaer.tizenarchivemanager` as the long-term `applicationId`; do not change it again after publishing.
 - Keep the existing `namespace` and Kotlin package paths for now: they govern generated names such as `R` and `BuildConfig`.
 - Keep the manifest action `dev.tizenarchive.companion.COMPANION` stable. It is the shared discovery contract used by helper apps.
-- Before an independent release, point the in-app updater at the fork's own GitHub repository and confirm its expected APK asset name. The inherited updater default points to `Tizen-Archive/tizen-archive-android`; the fork's release setup must point it to `MeisterBaer/Tizen-Archive-Manager`.
+- Before an independent release, point the in-app updater at the fork's own GitHub repository and confirm its expected APK asset name. The inherited updater default points to `Tizen-Archive/tizen-archive-android`; the fork's release setup must point it to `tizenarchivemanager-art/Tizen-Archive-Manager`.
 - Update the F-Droid recipe and distribution metadata to the fork's final package ID and repository URLs before publishing independently.
 - Treat the ID change as a new app installation: Android will not upgrade the old-ID installation or migrate its private data. Existing installs can remain beside it; both may appear as handlers for the same links or package files.
 
