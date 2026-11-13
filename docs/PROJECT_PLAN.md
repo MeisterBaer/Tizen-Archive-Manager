@@ -22,7 +22,7 @@ The open release PR #7 currently proposes `de.meisterbaer.tizenarchivemanager` a
 - Update the F-Droid recipe and distribution metadata to the fork's final package ID and repository URLs before resubmitting or publishing the fork independently.
 - Treat the ID change as a new app installation: Android will not upgrade the old-ID installation or migrate its private data. Existing installs can remain beside it; both may appear as handlers for the same links or package files.
 
-## 2. Develop the app UI in English first
+## 2. Use Android's automatic language selection with English fallback
 
 ### Current state
 
@@ -34,17 +34,20 @@ The open release PR #7 currently proposes `de.meisterbaer.tizenarchivemanager` a
 
 ### Requirements and implementation rules
 
-- English is the only UI language initially and the base resource set remains the source of truth.
-- Remove the Russian Android resource overrides so Russian device settings fall back to the English base strings. Replace any Russian UI copy with English.
-- Put every user-visible app string in Android resources, including labels, dialogs, notifications, accessibility descriptions, errors, and formatted/plural text. Dynamic values may remain data, but surrounding words and punctuation belong in resources.
-- Keep resource keys stable and make the default English resource complete. Avoid adding a language picker until there is a product need; Android resource selection already handles device locale.
-- Add German later as `values-de/strings.xml` using the same resource keys. This should not require language-specific UI logic.
-- Review Russian Fastlane metadata separately so store descriptions do not imply Russian UI support.
+- English is the complete default and fallback language. Keep every required resource in `app/src/main/res/values/strings.xml` (and the corresponding debug defaults where needed).
+- Use Android's native resource selection: the system locale selects a matching `values-<language>` resource set when one exists; otherwise Android uses the English base resources. Do not force the app locale to English.
+- Remove the Russian Android resource overrides and do not copy Russian UI translations from upstream. A Russian system locale must therefore display the English base strings.
+- Put every user-visible app string in Android resources, including labels, dialogs, notifications, accessibility descriptions, errors, plurals, and formatted text. Dynamic values may remain data, but surrounding words and punctuation belong in resources.
+- Keep resource keys stable and make the English resource set complete. Add later translations in separate locale-qualified resource directories, such as `values-de/strings.xml`, with the same keys.
+- Do not add an in-app language picker or override the system language now. An optional manual language choice can be considered later using Android's app-language support.
+- Review Russian Fastlane metadata separately so distribution pages do not imply Russian UI support.
 
 ### Completion checks
 
-1. No Russian text is rendered by the app on a Russian-locale device; it falls back to English.
-2. All visible app copy is sourced from Android resources and the default English set is complete.
-3. Original and fork release APKs have different application IDs and install together.
-4. The fork's updater, release asset naming, F-Droid recipe, and repository links all refer to the fork before independent publishing.
-5. A later German translation can be added with resource files only, without changing UI behavior.
+1. English is the complete default/fallback resource set.
+2. A supported Android system locale selects its matching translations automatically; unsupported locales fall back to English.
+3. A Russian-locale device shows English because no Russian UI resource overrides remain.
+4. All visible app copy is sourced from Android resources.
+5. Original and fork release APKs have different application IDs and install together.
+6. The fork's updater, release asset naming, F-Droid recipe, and repository links all refer to the fork before independent publishing.
+7. A later German translation can be added with locale resources only, without changing UI behavior or overriding the system language.
