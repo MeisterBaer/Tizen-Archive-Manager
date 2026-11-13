@@ -204,7 +204,7 @@ internal class Dependencies(
                 companions = CompanionRepository(application),
                 catalog = CatalogClient(
                     BuildConfig.CATALOG_URL,
-                    "tizen-companion-installer/${BuildConfig.VERSION_NAME}",
+                    "tizen-archive-manager/${BuildConfig.VERSION_NAME}",
                     allowCleartext = BuildConfig.DEBUG,
                 ),
                 // The key is fetched when a companion is built, as before
@@ -215,7 +215,7 @@ internal class Dependencies(
                 watch = WifiWatchGateway(application, KeystoreSdbKey()),
                 watchSettings = WatchSettingsStore(application),
                 watchHistory = WatchHistoryStore(application),
-                releases = GitHubReleaseClient("tizen-companion-installer/${BuildConfig.VERSION_NAME}"),
+                releases = GitHubReleaseClient("tizen-archive-manager/${BuildConfig.VERSION_NAME}"),
             )
         }
     }
