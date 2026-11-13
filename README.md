@@ -166,10 +166,12 @@ S4_OUT_DIR=/tmp/out S4_PACKAGE=/path/app.wgt ./gradlew :core:test --tests '*Devi
   tabs included), in English and Russian.
 
 GitHub Actions (`.github/workflows/check.yml`) runs `./gradlew check` with an empty Gradle cache on every push and pull
-request, and `make reproducible` on `v*` tags.
+request, runs the Android instrumentation tests on API 26 and API 35 emulators, and checks that release builds are
+reproducible.
 
 Debug builds use the application id suffix `.debug`, so they can be installed next to a release build without touching
-it. Instrumented tests (`app/src/androidTest`, Keystore and scale) need a device: `./gradlew :app:connectedDebugAndroidTest`.
+it. To run instrumented tests (`app/src/androidTest`, including Keystore and scale) locally, connect an emulator or device
+and run `./gradlew :app:connectedDebugAndroidTest`.
 
 Releases: [docs/RELEASING.md](docs/RELEASING.md).
 
