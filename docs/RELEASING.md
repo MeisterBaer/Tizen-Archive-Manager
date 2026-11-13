@@ -18,21 +18,17 @@
 Without the properties the release APK stays unsigned, which is what F-Droid builds. Keep the keystore outside the
 repository.
 
-## Publishing the GitHub release as the organization's GitHub App
+## Publishing the GitHub release
 
-A release is attributed to the account whose token creates it. To publish it as the organization's GitHub App
-(shown as `<app-slug>[bot]`) use an installation token:
+Publish from your GitHub account to the fork repository:
 
 ```
-export GITHUB_APP_CLIENT_ID=Iv23...            # client ID on the app settings page
-export GITHUB_APP_KEY=~/.config/tizen-companion-installer/github-app.pem
-GH_TOKEN=$(scripts/github-app-token.sh) gh release create v<version> \
-  tizen-archive-android-<version>.apk tizen-archive-android-<version>.apk.sha256 \
-  -R Tizen-Archive/tizen-archive-android --verify-tag --title "..." --notes-file notes.md
+gh release create v<versionName> \
+  tizen-archive-android-<versionName>.apk tizen-archive-android-<versionName>.apk.sha256 \
+  -R MeisterBaer/Tizen-Archive-Manager --verify-tag --title "Tizen Archive <versionName>" --notes-file notes.md
 ```
 
-The app needs only the repository permission "Contents: Read and write" and must be installed on this repository.
-The token lives for one hour; keep the private key outside the repository with mode 600.
+Use the release signing key described above for the APK. Keep the key and passwords outside the repository.
 
 ## F-Droid
 

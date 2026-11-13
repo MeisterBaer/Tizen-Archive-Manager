@@ -148,7 +148,7 @@ public class GitHubReleaseClient(
     )
 
     public companion object {
-        public const val DEFAULT_REPOSITORY: String = "Tizen-Archive/tizen-archive-android"
+        public const val DEFAULT_REPOSITORY: String = "MeisterBaer/Tizen-Archive-Manager"
         private const val CONNECT_TIMEOUT_MS = 10_000
         private const val READ_TIMEOUT_MS = 30_000
         private const val MAX_JSON_BYTES = 1024 * 1024
