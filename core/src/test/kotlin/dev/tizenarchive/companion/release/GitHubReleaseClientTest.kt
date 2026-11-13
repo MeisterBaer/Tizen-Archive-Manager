@@ -22,7 +22,7 @@ class GitHubReleaseClientTest {
     private lateinit var server: HttpServer
     private val apk = ByteArray(100_000) { (it * 3).toByte() }
     private val sha = MessageDigest.getInstance("SHA-256").digest(apk).joinToString("") { "%02x".format(it) }
-    private val path = "/Tizen-Archive/tizen-archive-android/releases/download/v0.4.0/tizen-archive-android-0.4.0.apk"
+    private val path = "/MeisterBaer/Tizen-Archive-Manager/releases/download/v0.4.0/tizen-archive-android-0.4.0.apk"
     private var served = apk
     private var answer = ""
     private var status = 200
@@ -50,7 +50,7 @@ class GitHubReleaseClientTest {
         server.createContext("/") { ex ->
             agents += ex.requestHeaders.getFirst("User-Agent")
             when (ex.requestURI.path) {
-                "/repos/Tizen-Archive/tizen-archive-android/releases/latest" -> reply(ex, status, answer.toByteArray())
+                "/repos/MeisterBaer/Tizen-Archive-Manager/releases/latest" -> reply(ex, status, answer.toByteArray())
                 path -> {
                     val target = redirectTo
                     if (target != null) {
