@@ -1,53 +1,87 @@
 # Android app identity and language plan
 
-This plan records two product requirements for the MeisterBaer fork.
+This plan records product requirements and implementation status for the MeisterBaer fork.
 
 ## 1. Give the fork its own Android identity
 
 ### Finding
 
-On `main`, the fork and upstream both currently set:
+The fork uses a separate Android application ID:
 
-- `applicationId`: `dev.tizenarchive.companion`
+- `applicationId`: `de.meisterbaer.tizenarchivemanager`
 - Android/Kotlin `namespace`: `dev.tizenarchive.companion`
 
-The open release PR #7 currently proposes `de.meisterbaer.tizenarchivemanager` as the new `applicationId`. This is a suitable distinct identifier for the fork and permits the original and fork APKs to be installed side by side once that change is merged.
+Keeping the existing namespace and Kotlin package paths avoids an unnecessary source-wide rewrite. The distinct application ID permits the original app and fork to be installed side by side.
 
 ### Decision and implementation rules
 
-- Use `de.meisterbaer.tizenarchivemanager` as the proposed long-term `applicationId`; do not change it again after publishing.
-- Change only the installed application ID. Keep the existing `namespace` and Kotlin package paths for now: they govern generated names such as `R` and `BuildConfig`, and changing them would add a broad source rewrite without helping parallel installation.
-- Keep the manifest action `dev.tizenarchive.companion.COMPANION` stable. It is the shared discovery contract used by helper apps. Do not rename it as part of the application-ID change.
+- Use `de.meisterbaer.tizenarchivemanager` as the long-term `applicationId`; do not change it again after publishing.
+- Keep the existing `namespace` and Kotlin package paths for now: they govern generated names such as `R` and `BuildConfig`.
+- Keep the manifest action `dev.tizenarchive.companion.COMPANION` stable. It is the shared discovery contract used by helper apps.
 - Before an independent release, point the in-app updater at the fork's own GitHub repository and confirm its expected APK asset name. The inherited updater default points to `Tizen-Archive/tizen-archive-android`; the fork's release setup must point it to `MeisterBaer/Tizen-Archive-Manager`.
-- Update the F-Droid recipe and distribution metadata to the fork's final package ID and repository URLs before resubmitting or publishing the fork independently.
+- Update the F-Droid recipe and distribution metadata to the fork's final package ID and repository URLs before publishing independently.
 - Treat the ID change as a new app installation: Android will not upgrade the old-ID installation or migrate its private data. Existing installs can remain beside it; both may appear as handlers for the same links or package files.
 
 ## 2. Use Android's automatic language selection with English fallback
 
-### Current state
+### Binding language requirements
 
-- `app/src/main/res/values/strings.xml` is already the English default resource set.
-- Russian overrides exist in both `app/src/main/res/values-ru/strings.xml` and `app/src/debug/res/values-ru/strings.xml`, so Android displays Russian when the device locale is Russian.
-- The debug build's app name is already English in its default resources.
-- Most UI copy is already read from Android string resources. The UI still needs a complete audit for visible literals and text assembled in code; for example, the folder summary combines a dynamic folder name, a hard-coded separator, and a plural resource.
-- Fastlane also contains Russian store listing and changelog metadata. That content is separate from runtime UI and should be reviewed as part of the distribution cleanup.
+- **English is the complete default and fallback language.**
+- The app automatically follows the Android system language whenever translations for that language are included.
+- If Android's system language is not supported by the app, Android must display the English default resources automatically.
+- Russian must be completely absent from the app's runtime user interface. Do not copy or retain Russian UI translations from the upstream project.
+- The translation structure must make it straightforward to add more languages later.
+- An optional manual language selector in the app settings is deferred to a later stage. Do not implement an app-specific language override or language picker now.
 
-### Requirements and implementation rules
+### Android localization implementation
 
-- English is the complete default and fallback language. Keep every required resource in `app/src/main/res/values/strings.xml` (and the corresponding debug defaults where needed).
-- Use Android's native resource selection: the system locale selects a matching `values-<language>` resource set when one exists; otherwise Android uses the English base resources. Do not force the app locale to English.
-- Remove the Russian Android resource overrides and do not copy Russian UI translations from upstream. A Russian system locale must therefore display the English base strings.
-- Put every user-visible app string in Android resources, including labels, dialogs, notifications, accessibility descriptions, errors, plurals, and formatted text. Dynamic values may remain data, but surrounding words and punctuation belong in resources.
-- Keep resource keys stable and make the English resource set complete. Add later translations in separate locale-qualified resource directories, such as `values-de/strings.xml`, with the same keys.
-- Do not add an in-app language picker or override the system language now. An optional manual language choice can be considered later using Android's app-language support.
-- Review Russian Fastlane metadata separately so distribution pages do not imply Russian UI support.
+Use Android's native resource-selection mechanism:
+
+- Keep the complete English resource set in `app/src/main/res/values/strings.xml`.
+- Add future translations in locale-qualified resource directories, for example `app/src/main/res/values-de/strings.xml`.
+- Keep resource keys consistent across languages.
+- Let Android select the matching locale resources based on the configured system language.
+- Do not force English as the app locale. English is the fallback because it is the unqualified base resource set.
+- Do not add Russian resource directories such as `values-ru` under either the main or debug app source sets.
+- Put all user-visible app copy in Android resources, including labels, dialogs, notifications, accessibility descriptions, errors, plurals and formatted text. Dynamic values may remain data, but surrounding words and punctuation belong in resources.
+
+### Verified repository state (2026-11-13)
+
+Pull request #9, **Use English fallback for Android system locales**, has been merged into `main`.
+
+The merged implementation:
+
+- Removes `app/src/main/res/values-ru/strings.xml`.
+- Removes `app/src/debug/res/values-ru/strings.xml`.
+- Leaves the English base resources as the default and fallback.
+- Moves the folder-summary separator into an Android string resource so that visible text remains localizable.
+- Updates the UI test so an unsupported Russian system locale is expected to display the English fallback.
+- Adds no app-language override and no manual language picker.
+
+The repository's current resource layout was checked: the two Russian Android resource files no longer exist. The app therefore uses Android's native locale selection and falls back to English for unsupported locales.
+
+### Remaining localization work
+
+- Audit the complete UI for any visible text literals that are not yet Android string resources.
+- Review Fastlane store-listing and changelog metadata separately. Russian distribution metadata is not an Android runtime translation, but it should not claim or imply that the app has a Russian UI.
+- When another language is added, provide a complete matching resource set (for example, German in `values-de`) and test automatic system-locale selection plus English fallback.
+- Consider a manual language selector only in a later, separately planned change.
 
 ### Completion checks
 
-1. English is the complete default/fallback resource set.
-2. A supported Android system locale selects its matching translations automatically; unsupported locales fall back to English.
-3. A Russian-locale device shows English because no Russian UI resource overrides remain.
-4. All visible app copy is sourced from Android resources.
-5. Original and fork release APKs have different application IDs and install together.
-6. The fork's updater, release asset naming, F-Droid recipe, and repository links all refer to the fork before independent publishing.
-7. A later German translation can be added with locale resources only, without changing UI behavior or overriding the system language.
+1. English is the complete default/fallback resource set. **Implemented.**
+2. Android automatically selects translations matching the device's configured system language when those resources exist. **Native Android resource selection is retained; no app locale override is used.**
+3. Unsupported system locales fall back to English. **Implemented and covered by a UI test.**
+4. Russian UI resource overrides are absent from main and debug source sets. **Implemented and verified.**
+5. Visible app copy is sourced from Android resources. **Audit still required.**
+6. A later German translation can be added with locale resources only, without changing UI behavior or overriding the system language. **Structure prepared; German translation not yet implemented.**
+7. Optional manual language selection remains deferred. **Not implemented by design.**
+
+## 3. Overall publication follow-up
+
+Before an independent public release, verify that:
+
+- the in-app updater and release asset naming refer to this fork;
+- F-Droid metadata and recipes refer to this fork and its final application ID;
+- repository links and distribution metadata are correct;
+- the README and store listings describe the actual supported UI languages accurately.
