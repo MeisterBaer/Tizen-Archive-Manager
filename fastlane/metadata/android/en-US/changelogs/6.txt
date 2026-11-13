@@ -1,0 +1,1 @@
+Harden package manifest parsing and keep it compatible with Android's XML parser.
