@@ -25,7 +25,7 @@ Publish from your GitHub account to the fork repository:
 ```
 gh release create v<versionName> \
   tizen-archive-android-<versionName>.apk tizen-archive-android-<versionName>.apk.sha256 \
-  -R MeisterBaer/Tizen-Archive-Manager --verify-tag --title "Tizen Archive <versionName>" --notes-file notes.md
+  -R tizenarchivemanager-art/Tizen-Archive-Manager --verify-tag --title "Tizen Archive <versionName>" --notes-file notes.md
 ```
 
 Use the release signing key described above for the APK. Keep the key and passwords outside the repository.
@@ -40,7 +40,7 @@ raised no objections, and the maintainer invited us to re-open the MR once the c
 created on 2026-10-20, so the next attempt is planned for **late January 2027** or later. GitHub Releases is the only
 other distribution channel.
 
-**Until then:** keep releasing as usual (checklist above) and keep the signing key and the GitHub App key safe. Evidence
+**Until then:** keep releasing as usual (checklist above) and keep signing keys and credentials outside the repository. Evidence
 of users helps (release downloads, the "Android app" line in the Tizen Archive download statistics).
 
 **Resubmitting:**
