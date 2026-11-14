@@ -1,4 +1,4 @@
-Installs Tizen watch packages (.wgt and .tpk) on a Samsung Galaxy Watch or Gear watch, without a computer. There are two ways of sending, chosen with a switch at the top of the screen:
+Tizen Archive Manager installs Tizen watch packages (.wgt and .tpk) on a Samsung Galaxy Watch or Gear watch, without a computer. There are two ways of sending, chosen with a switch at the top of the screen:
 
 • Galaxy Wearable: no developer mode on the watch. For every package the app builds a tiny helper app that carries the package, signs it with a key that never leaves your phone and asks Android to install it. Galaxy Wearable notices the helper app and sends the package to the watch over Bluetooth.
 • Wi-Fi: faster, and it shows what the watch really answered. The phone talks to the watch over your Wi-Fi network and installs the package with the watch's own package manager. It needs Debugging turned on in the watch's developer options.

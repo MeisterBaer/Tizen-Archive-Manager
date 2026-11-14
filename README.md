@@ -1,13 +1,13 @@
-# Tizen Archive for Android
+# Tizen Archive Manager
 
-[![check](https://github.com/MeisterBaer/Tizen-Archive-Manager/actions/workflows/check.yml/badge.svg)](https://github.com/MeisterBaer/Tizen-Archive-Manager/actions/workflows/check.yml)
+[![check](https://github.com/tizenarchivemanager-art/Tizen-Archive-Manager/actions/workflows/check.yml/badge.svg)](https://github.com/tizenarchivemanager-art/Tizen-Archive-Manager/actions/workflows/check.yml)
 
 Android app of the [Tizen Archive](https://tizen-archive.com) project (named Tizen Companion Installer up to 0.3.0)
 that installs Tizen watch packages (`.wgt`, `.tpk`) on a Samsung Galaxy Watch or Gear watch, without a computer. It has two ways of sending, chosen with a switch at the top of the screen:
 
 - **Galaxy Wearable** (no developer mode needed). For every package the app builds a tiny code-free companion APK that
   carries the package in `assets/`, signs it with a key kept in the Android Keystore and asks Android to install it.
-  Samsung's Gear Plugin notices the companion and sends the package to the watch over Bluetooth. In MeisterBaer's test, the Gear S Plugin required permission to install unknown apps.
+  Samsung's Gear Plugin notices the companion and sends the package to the watch over Bluetooth. In testing, the Gear S Plugin required permission to install unknown apps.
 - **Wi-Fi** (faster, shows the real result). The phone talks `sdb` to the watch over your Wi-Fi network and installs the
   package with the watch's own package manager (`pkgcmd -w`, the mode that accepts store-signed packages). It needs
   Debugging turned on in the watch's developer options.
@@ -17,7 +17,7 @@ Both ways install only what the watch's own package manager accepts (a valid sto
 
 ## Features
 
-- Two ways of sending (see above). The switch, a one-line status ("Ready · 192.168.0.188", "Setup needed") and the setup
+- Two ways of sending (see above). The switch, a one-line status ("Ready · [watch address]", "Setup needed") and the setup
   behind it (a bottom sheet) sit above the tabs; the header slides away when you scroll.
 - Pick a folder, search, select packages and install them in one queue.
 - Handles the "Install on the watch" link of the [Tizen Archive](https://tizen-archive.com) catalog
@@ -52,7 +52,7 @@ Both ways install only what the watch's own package manager accepts (a valid sto
 - No ads, analytics or trackers. The internet is used only for the catalog link above, for the update checks you start
   and, for the app's own update, for GitHub. The Wi-Fi way connects only to the watch in your local network (a private address you type or find with
   the button, port 26101) and never to anything else.
-- English and Russian interface.
+- English interface; Android uses available system-language translations and falls back to English.
 
 ## Requirements
 
@@ -79,7 +79,7 @@ Wi-Fi way:
 
 ## Install
 
-Download the APK from the [latest release](https://github.com/MeisterBaer/Tizen-Archive-Manager/releases/latest)
+Download the APK from the [latest release](https://github.com/tizenarchivemanager-art/Tizen-Archive-Manager/releases/latest)
 and open it on the phone (Android asks to allow installs from your browser or file manager).
 
 Verify the download:
@@ -163,7 +163,7 @@ S4_OUT_DIR=/tmp/out S4_PACKAGE=/path/app.wgt ./gradlew :core:test --tests '*Devi
 - `app`: Robolectric tests. `MainViewModelTest` drives the real `MainViewModel` on fakes (`Dependencies`: installer,
   catalog, folder, clock), including the pacing between operations; `MainContentTest` renders the screen with
   Compose test APIs against a recording `MainActions` (the way-of-sending header, the setup sheet, the Wi-Fi rows and
-  tabs included), in English and Russian.
+  tabs included), in English.
 
 GitHub Actions (`.github/workflows/check.yml`) runs `./gradlew check` with an empty Gradle cache on every push and pull
 request, runs the Android instrumentation tests on API 26 and API 35 emulators, and checks that release builds are
@@ -175,9 +175,6 @@ and run `./gradlew :app:connectedDebugAndroidTest`.
 
 Releases: [docs/RELEASING.md](docs/RELEASING.md).
 
-## Contributors
-
-- **MeisterBaer**
 
 ## License
 
