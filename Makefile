@@ -9,6 +9,8 @@ export ANDROID_HOME
 .PHONY: check test clean reproducible
 
 check test:
+	python3 scripts/check-ui-localization.py --self-test
+	python3 scripts/check-ui-localization.py
 	./gradlew check --no-daemon
 
 clean:
