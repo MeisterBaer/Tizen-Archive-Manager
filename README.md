@@ -75,7 +75,7 @@ Wi-Fi way:
 - Tested on a Samsung Gear S3 Frontier (SM-R760, Tizen 4.0.0.7, firmware R760XXU2FUD1) over Wi-Fi. During this test, the watch refused a package with `The watch refused the package (Image error -24)`. The cause is unknown; this error alone does not establish a compatibility issue.
 - No other `sdb` tool connected to the watch at the same moment (the watch serves one host at a time), and no VPN
   running on the phone (it can capture the traffic to the watch).
-- Tested on a Galaxy Watch (SM-R800, Tizen 5.5) with Android 17.
+- A separate test used a Galaxy Watch (SM-R800, Tizen 5.5) with Android 17; its transfer path was not recorded, so this is not counted as Wi-Fi/SDB evidence.
 
 ## Install
 
@@ -137,7 +137,7 @@ Galaxy Wearable way:
 make check
 ```
 
-Needs JDK 21 to run the Gradle build (the application bytecode target remains JVM 17; the Makefile defaults to `~/.local/share/jdks/temurin-21`) and the Android SDK (`local.properties` with `sdk.dir`, Android platform 37 and build-tools 37.0.0). Set `AAPT2=<path to aapt2>`
+Needs JDK 17 or newer to run Gradle (CI uses JDK 21; the Makefile defaults to `~/.local/share/jdks/temurin-21`; application bytecode targets JVM 17) and the Android SDK (`local.properties` with `sdk.dir`, Android platform 37 and build-tools 37.0.0). Set `AAPT2=<path to aapt2>`
 to additionally cross-check the generated manifest against Google's `aapt2`.
 
 `make reproducible` builds the unsigned release APK twice from clean clones of `HEAD` and compares them.
