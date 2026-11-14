@@ -29,8 +29,7 @@ Source: https://github.com/Tizen-Archive/tizen-archive-android (Apache-2.0). Scr
 ## Why this app
 
 Samsung shut down the Galaxy Store for Tizen watches, and the official way to put a package on a watch now needs a
-computer, sdb and developer mode. I found no F-Droid app that installs Tizen packages through Galaxy Wearable. The
-approach was verified on a Galaxy Watch (SM-R800, Tizen 5.5) with Galaxy Wearable 2.2.72 on Android 17.
+computer, sdb and developer mode. The approach was verified by the original developer on a Samsung Galaxy Watch (SM-R800, Tizen 5.5) with Galaxy Wearable 2.2.72 on Android 17.
 
 ## Notes for reviewers
 
@@ -41,9 +40,9 @@ approach was verified on a Galaxy Watch (SM-R800, Tizen 5.5) with Galaxy Wearabl
 * Reproducible build: `Binaries` and `AllowedAPKSigningKeys` are set. I checked with apksigcopier that the signature of
   the GitHub release APK can be copied onto the unsigned APK built by fdroidserver (version 0.1.1, commit
   09712d9e1df65f3fa24798440530a4aae0ff242b).
-* CI note: GitLab asks for identity verification (phone or card) before it runs pipelines in my fork, and I did not submit
-  any. As the template suggests, please trigger the CI on your side. Locally `fdroid lint` and `fdroid rewritemeta` are
-  clean and the build succeeds in the official fdroidserver container.
+* CI note: If GitLab CI cannot be started from a contributor fork, please ask the F-Droid maintainers to trigger the
+  pipeline. Locally `fdroid lint` and `fdroid rewritemeta` are clean and the build succeeds in the official
+  fdroidserver container.
 * `fdroid lint` passes and `fdroid build` succeeds in the official fdroidserver container.
 * Dependencies are verified by Gradle (`gradle/verification-metadata.xml`), the wrapper distribution is pinned.
 
@@ -94,5 +93,5 @@ Reproducible builds are enabled, so no reason is needed there.
 
 * [ ] All pipelines should pass.
 * [ ] All warnings and errors in the Reports tab should be fixed or explained.
-* [ ] F-Droid CI runners are under GitLab's FOSS program, so there's no need for you to pay for any CI time. If Gitlab starts asking for phone numbers or credit cards don't submit anything, just leave a note in the MR so we know we need to trigger the CI.
+* [ ] F-Droid CI runners are under GitLab's FOSS program, so there's no need for you to pay for any CI time. If CI cannot be started from a contributor fork, leave a note in the merge request so maintainers can trigger it.
 ```

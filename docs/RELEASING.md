@@ -30,6 +30,10 @@ gh release create v<versionName> \
 
 Use the release signing key described above for the APK. Keep the key and passwords outside the repository.
 
+## Documentation privacy and technical test data
+
+Privacy reviews must distinguish personal or security-sensitive information from reproducible technical evidence. Do not remove technical details merely because they identify a device or software environment. Preserve relevant, source-attributed test details such as device models, OS/firmware versions, application versions and test conditions when they support compatibility, reproducibility or troubleshooting. Remove or anonymize actual personal data, credentials, unique device identifiers (for example serial numbers, IMEI or MAC addresses), private network details and unrelated identifying information. If the relevance or sensitivity of a detail is unclear, verify its purpose before changing it.
+
 ## F-Droid
 
 **Status.** The recipe `docs/fdroid/dev.tizenarchive.companion.yml` was submitted as
@@ -53,8 +57,8 @@ of users helps (release downloads, the "Android app" line in the Tizen Archive d
    (`metadata/dev.tizenarchive.companion.yml`, committed as "New app: Tizen Archive" by Tizen Archive) and
    re-open !53448 or open a new MR. Text for the description: `docs/fdroid/merge-request.md`; add the development
    history, the releases and the evidence of users.
-4. GitLab asks the fork for identity verification (phone or card) before it runs CI; do not submit anything, the
-   F-Droid maintainers run the CI themselves (say so in the MR, the text already does).
+4. If GitLab CI cannot be started from the contributor fork, ask F-Droid maintainers to trigger the pipeline and note
+   this limitation in the merge request.
 
 Things F-Droid checks:
 
