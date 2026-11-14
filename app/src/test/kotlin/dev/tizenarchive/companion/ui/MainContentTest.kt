@@ -684,7 +684,7 @@ class MainContentTest {
     @Test
     fun `the status row carries a name for screen readers and acts as a button`() {
         show(UiState())
-        compose.onNode(hasContentDescription(str(R.string.setup_toggle), substring = true)).assertExists().assertHasClickAction()
+        compose.onNode(hasContentDescription(str(R.string.status_accessibility, str(R.string.setup_toggle), str(R.string.status_wifi_ready, "192.168.0.20")))).assertExists().assertHasClickAction()
     }
 
     @Test
