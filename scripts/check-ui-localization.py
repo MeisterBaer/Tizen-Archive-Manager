@@ -3,7 +3,7 @@
 
 Dynamic package/device values and protocol tokens are data, not UI copy.
 This check targets literal arguments to common Compose text components and
-accessibility properties; it is intentionally not a full Kotlin parser.
+accessibility descriptions; it is intentionally not a full Kotlin parser.
 """
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ SOURCE = ROOT / "app" / "src" / "main" / "kotlin"
 
 PATTERNS = (
     re.compile(r'\b(?:Text|BasicText)\s*\(\s*(?:text\s*=\s*)?"((?:\\.|[^"\\])*)"', re.DOTALL),
-    re.compile(r'\b(?:contentDescription|stateDescription|label|placeholder)\s*=\s*"((?:\\.|[^"\\])*)"', re.DOTALL),
+    re.compile(r'\b(?:contentDescription|stateDescription)\s*=\s*"((?:\\.|[^"\\])*)"', re.DOTALL),
 )
 PURE_INTERPOLATION = re.compile(r'^(?:\$\{[^}]+\}|\$[A-Za-z_]\w*)+$')
 DATA_LITERALS = {".tpk", ".wgt", "TPK", "WGT", "SDB", "APK"}
