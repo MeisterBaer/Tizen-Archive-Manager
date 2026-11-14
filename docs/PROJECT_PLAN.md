@@ -62,7 +62,7 @@ The repository's current resource layout was checked: the two Russian Android re
 
 ### Remaining localization work
 
-- Audit the complete UI for any visible text literals that are not yet Android string resources.
+- Complete the repository-wide audit for visible text literals that are not yet Android string resources; the primary Compose UI surfaces have had an initial targeted review.
 - Review Fastlane store-listing and changelog metadata separately. Russian distribution metadata is not an Android runtime translation, but it should not claim or imply that the app has a Russian UI.
 - When another language is added, provide a complete matching resource set (for example, German in `values-de`) and test automatic system-locale selection plus English fallback.
 - Consider a manual language selector only in a later, separately planned change.
@@ -73,7 +73,7 @@ The repository's current resource layout was checked: the two Russian Android re
 2. Android automatically selects translations matching the device's configured system language when those resources exist. **Native Android resource selection is retained; no app locale override is used.**
 3. Unsupported system locales fall back to English. **Implemented and covered by a UI test.**
 4. Russian UI resource overrides are absent from main and debug source sets. **Implemented and verified.**
-5. Visible app copy is sourced from Android resources. **Audit still required.**
+5. Visible app copy is sourced from Android resources. **IN PROGRESS.** A targeted review of the primary Compose UI files (`MainScreen.kt`, `SendHeader.kt`, `WatchReview.kt` and `MainActivity.kt`) found user-facing labels and messages using Android string resources; dynamic package names, watch addresses, release notes and device-reported details remain data. Complete the repository-wide audit and add a regression check before marking this DONE.
 6. A later German translation can be added with locale resources only, without changing UI behavior or overriding the system language. **Structure prepared; German translation not yet implemented.**
 7. Optional manual language selection remains deferred. **Not implemented by design.**
 
