@@ -434,9 +434,9 @@ private fun WatchTab(
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(companion.label, style = MaterialTheme.typography.titleMedium)
-                    val details = listOfNotNull(companion.tizenPackageId, companion.tizenVersion?.let { "v$it" }, companion.kind?.uppercase())
+                    val details = listOfNotNull(companion.tizenPackageId, companion.tizenVersion?.let { stringResource(R.string.version_prefix, it) }, companion.kind?.uppercase())
                     if (details.isNotEmpty()) {
-                        Text(details.joinToString(" · "), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(details.joinToString(stringResource(R.string.metadata_separator)), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     val sent = DateUtils.formatDateTime(context, companion.updatedAt, DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_SHOW_YEAR)
                     Text(stringResource(R.string.watch_sent, sent), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -694,10 +694,10 @@ private fun FileRow(file: PackageFile, preview: PackagePreview?, checked: Boolea
             Text(preview?.name ?: file.name, style = MaterialTheme.typography.bodyLarge)
             val details = listOfNotNull(
                 preview?.packageId,
-                preview?.version?.let { "v$it" },
+                preview?.version?.let { stringResource(R.string.version_prefix, it) },
                 preview?.kind?.uppercase(),
                 formatSize(file.size),
-            ).joinToString(" · ")
+            ).joinToString(stringResource(R.string.metadata_separator))
             Text(
                 text = itemState?.let { describe(it) } ?: details,
                 style = MaterialTheme.typography.bodySmall,
@@ -981,7 +981,7 @@ private fun WatchPackageCard(
                     null -> null
                 }
                 Text(
-                    listOfNotNull(kind, item.id, "v${item.version}", item.type.uppercase()).joinToString(" · "),
+                    listOfNotNull(kind, item.id, stringResource(R.string.version_prefix, item.version), item.type.uppercase()).joinToString(stringResource(R.string.metadata_separator)),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

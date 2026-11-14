@@ -198,6 +198,7 @@ class MainContentTest {
         val c = companion("com.a")
         show(UiState(companions = listOf(c)))
         compose.onNodeWithText(str(R.string.tab_watch, 1)).performClick()
+        compose.onNodeWithText("com.a" + str(R.string.metadata_separator) + str(R.string.version_prefix, "1.0") + str(R.string.metadata_separator) + "TPK").assertExists()
         compose.onNodeWithText(str(R.string.resend_to_watch)).performClick()
         compose.onNodeWithText(str(R.string.check_updates)).performClick()
         compose.onNodeWithText(str(R.string.remove_from_watch)).performClick()
@@ -682,8 +683,8 @@ class MainContentTest {
 
     @Test
     fun `the status row carries a name for screen readers and acts as a button`() {
-        show(UiState())
-        compose.onNode(hasContentDescription(str(R.string.setup_toggle), substring = true)).assertExists().assertHasClickAction()
+        show(UiState(mode = InstallMode.WIFI, watchAddress = "192.168.0.20"))
+        compose.onNode(hasContentDescription(str(R.string.status_accessibility, str(R.string.setup_toggle), str(R.string.status_wifi_ready, "192.168.0.20")))).assertExists().assertHasClickAction()
     }
 
     @Test

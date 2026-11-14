@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Tizen Archive Manager</string>
+    <string name="version_prefix">v%1$s</string>
+    <string name="metadata_separator"> · </string>
     <string name="choose_folder">Choose folder</string>
     <string name="change_folder">Change folder</string>
     <string name="no_folder">Choose a folder with .wgt and .tpk files</string>
@@ -207,6 +209,7 @@
     <string name="status_wifi_no_address">Enter the address of the watch</string>
     <string name="status_wifi_bad_address">The address of the watch is not valid</string>
     <string name="setup_toggle">Connection setup</string>
+    <string name="status_accessibility">%1$s: %2$s</string>
     <string name="setup_done">Done</string>
     <string name="source_companion">Helper apps this phone sent through Galaxy Wearable</string>
     <string name="source_wifi">Packages the watch reports over Wi-Fi · %1$s</string>

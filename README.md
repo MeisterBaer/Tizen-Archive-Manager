@@ -75,7 +75,7 @@ Wi-Fi way:
 - Tested on a Samsung Gear S3 Frontier (SM-R760, Tizen 4.0.0.7, firmware R760XXU2FUD1) over Wi-Fi. During this test, the watch refused a package with `The watch refused the package (Image error -24)`. The cause is unknown; this error alone does not establish a compatibility issue.
 - No other `sdb` tool connected to the watch at the same moment (the watch serves one host at a time), and no VPN
   running on the phone (it can capture the traffic to the watch).
-- Tested on a Galaxy Watch (SM-R800, Tizen 5.5) with Android 17.
+- A separate test used a Galaxy Watch (SM-R800, Tizen 5.5) with Android 17; its transfer path was not recorded, so this is not counted as Wi-Fi/SDB evidence.
 
 ## Install
 
@@ -137,8 +137,7 @@ Galaxy Wearable way:
 make check
 ```
 
-Needs JDK 17+ (the Makefile defaults to `~/.local/share/jdks/temurin-21`) and the Android SDK
-(`local.properties` with `sdk.dir`, platform 37, build-tools 36/37). Set `AAPT2=<path to aapt2>`
+Needs JDK 17 or newer to run Gradle (CI uses JDK 21; the Makefile defaults to `~/.local/share/jdks/temurin-21`; application bytecode targets JVM 17) and the Android SDK (`local.properties` with `sdk.dir`, Android platform 37 and build-tools 37.0.0). Set `AAPT2=<path to aapt2>`
 to additionally cross-check the generated manifest against Google's `aapt2`.
 
 `make reproducible` builds the unsigned release APK twice from clean clones of `HEAD` and compares them.
@@ -154,7 +153,7 @@ S4_OUT_DIR=/tmp/out S4_PACKAGE=/path/app.wgt ./gradlew :core:test --tests '*Devi
 
 ## Testing
 
-`make check` runs everything on the JVM, with no phone or emulator:
+`make check` runs the static UI localization guard, unit tests and Robolectric tests; the Gradle checks run without a phone or emulator:
 
 - `core`: JUnit 5 unit tests (binary manifest writer, APK layout and signing, package reader, catalog client,
   link parser, pacing) plus fuzz-style robustness tests. The `sdb` client is tested against `FakeSdbd`, a small sdbd on
@@ -165,9 +164,7 @@ S4_OUT_DIR=/tmp/out S4_PACKAGE=/path/app.wgt ./gradlew :core:test --tests '*Devi
   Compose test APIs against a recording `MainActions` (the way-of-sending header, the setup sheet, the Wi-Fi rows and
   tabs included), in English.
 
-GitHub Actions (`.github/workflows/check.yml`) runs `./gradlew check` with an empty Gradle cache on every push and pull
-request, runs the Android instrumentation tests on API 26 and API 35 emulators, and checks that release builds are
-reproducible.
+GitHub Actions (`.github/workflows/check.yml`) runs the static UI localization guard and `./gradlew check` with an empty Gradle cache on every push and pull request, runs Android instrumentation tests on API 26 and API 35 emulators, and checks that unsigned release builds are reproducible.
 
 Debug builds use the application id suffix `.debug`, so they can be installed next to a release build without touching
 it. To run instrumented tests (`app/src/androidTest`, including Keystore and scale) locally, connect an emulator or device

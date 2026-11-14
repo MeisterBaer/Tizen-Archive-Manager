@@ -6,7 +6,9 @@
 
 | Field | Recorded value |
 |---|---|
-| Device | Samsung Gear S3 Frontier |
+| Device | Samsung Gear S3 Frontier (SM-R760) |
+| Tizen version | 4.0.0.7 |
+| Firmware | R760XXU2FUD1 |
 | Transfer path | SDB over Wi-Fi |
 
 ## Verified observations

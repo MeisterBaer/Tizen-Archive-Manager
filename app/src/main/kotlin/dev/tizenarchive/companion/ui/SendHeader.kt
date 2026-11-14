@@ -237,13 +237,14 @@ private fun StatusLine(state: UiState, readiness: Readiness, onClick: () -> Unit
         Readiness.MISSING -> stringResource(R.string.status_wearable_setup)
     }
     val toggleLabel = stringResource(R.string.setup_toggle)
+    val accessibilityDescription = stringResource(R.string.status_accessibility, toggleLabel, status)
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = 48.dp)
             .clickable(role = Role.Button, onClick = onClick)
-            .semantics(mergeDescendants = true) { contentDescription = "$toggleLabel: $status" },
+            .semantics(mergeDescendants = true) { contentDescription = accessibilityDescription },
     ) {
         // A tick or a warning sign next to the text: the state is never carried by colour alone
         Icon(
