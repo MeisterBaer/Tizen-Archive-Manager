@@ -53,8 +53,8 @@ of users helps (release downloads, the "Android app" line in the Tizen Archive d
    (`metadata/dev.tizenarchive.companion.yml`, committed as "New app: Tizen Archive" by Tizen Archive) and
    re-open !53448 or open a new MR. Text for the description: `docs/fdroid/merge-request.md`; add the development
    history, the releases and the evidence of users.
-4. GitLab asks the fork for identity verification (phone or card) before it runs CI; do not submit anything, the
-   F-Droid maintainers run the CI themselves (say so in the MR, the text already does).
+4. If GitLab CI cannot be started from the contributor fork, ask F-Droid maintainers to trigger the pipeline and note
+   this limitation in the merge request.
 
 Things F-Droid checks:
 
