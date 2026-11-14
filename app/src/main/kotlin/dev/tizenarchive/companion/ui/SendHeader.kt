@@ -243,7 +243,7 @@ private fun StatusLine(state: UiState, readiness: Readiness, onClick: () -> Unit
             .fillMaxWidth()
             .heightIn(min = 48.dp)
             .clickable(role = Role.Button, onClick = onClick)
-            .semantics(mergeDescendants = true) { contentDescription = "$toggleLabel: $status" },
+            .semantics(mergeDescendants = true) { contentDescription = stringResource(R.string.status_accessibility, toggleLabel, status) },
     ) {
         // A tick or a warning sign next to the text: the state is never carried by colour alone
         Icon(
