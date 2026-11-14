@@ -683,7 +683,7 @@ class MainContentTest {
 
     @Test
     fun `the status row carries a name for screen readers and acts as a button`() {
-        show(UiState())
+        show(UiState(mode = InstallMode.WIFI, watchAddress = "192.168.0.20"))
         compose.onNode(hasContentDescription(str(R.string.status_accessibility, str(R.string.setup_toggle), str(R.string.status_wifi_ready, "192.168.0.20")))).assertExists().assertHasClickAction()
     }
 
