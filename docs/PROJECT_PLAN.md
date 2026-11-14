@@ -62,7 +62,7 @@ The repository's current resource layout was checked: the two Russian Android re
 
 ### Remaining localization work
 
-- Complete the repository-wide audit for visible text literals that are not yet Android string resources; the primary Compose UI surfaces have had an initial targeted review.
+- Run `scripts/check-ui-localization.py` as a heuristic guard against literal Compose text and accessibility labels; it is wired into `make check` and GitHub Actions. Review any findings and known parser limitations before treating the audit as complete.
 - Review Fastlane store-listing and changelog metadata separately. Russian distribution metadata is not an Android runtime translation, but it should not claim or imply that the app has a Russian UI.
 - When another language is added, provide a complete matching resource set (for example, German in `values-de`) and test automatic system-locale selection plus English fallback.
 - Consider a manual language selector only in a later, separately planned change.
@@ -73,7 +73,7 @@ The repository's current resource layout was checked: the two Russian Android re
 2. Android automatically selects translations matching the device's configured system language when those resources exist. **Native Android resource selection is retained; no app locale override is used.**
 3. Unsupported system locales fall back to English. **Implemented and covered by a UI test.**
 4. Russian UI resource overrides are absent from main and debug source sets. **Implemented and verified.**
-5. Visible app copy is sourced from Android resources. **IN PROGRESS.** A targeted review of the primary Compose UI files (`MainScreen.kt`, `SendHeader.kt`, `WatchReview.kt` and `MainActivity.kt`) found user-facing labels and messages using Android string resources; dynamic package names, watch addresses, release notes and device-reported details remain data. Complete the repository-wide audit and add a regression check before marking this DONE.
+5. Visible app copy is sourced from Android resources. **IN PROGRESS.** All 22 Kotlin source files under `app/src/main/kotlin` received a source scan; package metadata formatting and status accessibility copy were moved into resources and covered by Compose assertions. `scripts/check-ui-localization.py` now checks common Compose text and accessibility literal patterns and is wired into `make check` and CI. This is a heuristic rather than a full Kotlin parser; review its first CI run and known limitations before marking this DONE.
 6. A later German translation can be added with locale resources only, without changing UI behavior or overriding the system language. **Structure prepared; German translation not yet implemented.**
 7. Optional manual language selection remains deferred. **Not implemented by design.**
 
