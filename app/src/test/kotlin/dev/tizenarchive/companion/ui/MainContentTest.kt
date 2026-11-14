@@ -198,6 +198,7 @@ class MainContentTest {
         val c = companion("com.a")
         show(UiState(companions = listOf(c)))
         compose.onNodeWithText(str(R.string.tab_watch, 1)).performClick()
+        compose.onNodeWithText("com.a" + str(R.string.metadata_separator) + str(R.string.version_prefix, "1.0") + str(R.string.metadata_separator) + "TPK").assertExists()
         compose.onNodeWithText(str(R.string.resend_to_watch)).performClick()
         compose.onNodeWithText(str(R.string.check_updates)).performClick()
         compose.onNodeWithText(str(R.string.remove_from_watch)).performClick()
