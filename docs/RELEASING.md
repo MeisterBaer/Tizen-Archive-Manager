@@ -30,6 +30,10 @@ gh release create v<versionName> \
 
 Use the release signing key described above for the APK. Keep the key and passwords outside the repository.
 
+## Documentation privacy and technical test data
+
+Privacy reviews must distinguish personal or security-sensitive information from reproducible technical evidence. Do not remove technical details merely because they identify a device or software environment. Preserve relevant, source-attributed test details such as device models, OS/firmware versions, application versions and test conditions when they support compatibility, reproducibility or troubleshooting. Remove or anonymize actual personal data, credentials, unique device identifiers (for example serial numbers, IMEI or MAC addresses), private network details and unrelated identifying information. If the relevance or sensitivity of a detail is unclear, verify its purpose before changing it.
+
 ## F-Droid
 
 **Status.** The recipe `docs/fdroid/dev.tizenarchive.companion.yml` was submitted as
