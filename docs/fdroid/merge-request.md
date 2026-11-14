@@ -29,7 +29,7 @@ Source: https://github.com/Tizen-Archive/tizen-archive-android (Apache-2.0). Scr
 ## Why this app
 
 Samsung shut down the Galaxy Store for Tizen watches, and the official way to put a package on a watch now needs a
-computer, sdb and developer mode. The approach was tested on a Samsung Galaxy Watch using Galaxy Wearable.
+computer, sdb and developer mode. The approach was verified by the original developer on a Samsung Galaxy Watch (SM-R800, Tizen 5.5) with Galaxy Wearable 2.2.72 on Android 17.
 
 ## Notes for reviewers
 
