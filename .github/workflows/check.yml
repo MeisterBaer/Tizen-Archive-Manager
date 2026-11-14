@@ -28,6 +28,10 @@ jobs:
           yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37.0" "build-tools;37.0.0" > /dev/null
           echo "sdk.dir=$ANDROID_HOME" > local.properties
+      - name: Static UI localization check
+        run: |
+          python3 scripts/check-ui-localization.py --self-test
+          python3 scripts/check-ui-localization.py
       # Empty Gradle cache on purpose: dependency verification must pass the way F-Droid will build it
       - name: Check (unit tests, lint, aapt2 cross-check)
         run: ./gradlew check --no-daemon
